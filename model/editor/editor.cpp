@@ -14,14 +14,31 @@ void Editor::setBase(const int base)
     }
 }
 
-int Editor::getBase() const
+void Editor::setAccuracy(const int accuracy)
 {
-    return m_base;
+    if (accuracy < 0)
+    {
+        throw NumberException{"accuracy is out of range"};
+    }
+    if (m_accruracy != accuracy)
+    {
+        m_accruracy = accuracy;
+    }
 }
 
 std::string Editor::getExpression() const
 {
     return m_expression;
+}
+
+int Editor::getBase() const
+{
+    return m_base;
+}
+
+int Editor::getAccuracy() const
+{
+    return m_accruracy;
 }
 
 void Editor::addExpression(const std::string &expression)

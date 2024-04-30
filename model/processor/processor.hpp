@@ -22,10 +22,11 @@ private:
     ~Processor() = default;
 
 public:
-    static Processor* getInstance() noexcept;
+    static Processor* getInstance();
 
 public:
     void setOperator(Operator op);
+    void setOperator(const std::string& op);
     void setLhs(const RealNumber& lhs);
     void setRhs(const RealNumber& rhs);
     RealNumber execute();

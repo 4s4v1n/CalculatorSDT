@@ -9,22 +9,18 @@ Item {
 
     TopPanel {
         id: top_panel
-        height: parent.height / 2
+        height: parent.height / 4
 
         anchors {
             top: parent.top
             left: parent.left
             right: parent.right
         }
-
-        // onOutputBaseValueChanged: {
-        //     top_panel.outputValue = Controller.convert()
-        // }
     }
 
     BottomPanel {
         id: bottom_panel
-        height: parent.height / 2
+        height: parent.height / 4 * 3
         inputValue: top_panel.inputValue
         inputBase: top_panel.inputBase
 

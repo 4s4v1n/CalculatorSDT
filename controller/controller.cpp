@@ -1,6 +1,7 @@
 #include "controller.hpp"
 
 #include <algorithm>
+#include <array>
 #include <iostream>
 
 #include "model/converter/converter_p_to_decimal.hpp"
@@ -10,7 +11,7 @@
 
 #include "model/number/real_number.hpp"
 
-#include "model/exception/conversion_exception.hpp"
+// #include "model/exception/conversion_exception.hpp"
 
 Controller* Controller::getInstance()
 {
@@ -20,69 +21,41 @@ Controller* Controller::getInstance()
 
 QString Controller::calculate()
 {
+    static std::array<std::string, 6> delimeters {"+", "-", "*", "/",
+                                                  "square", "reverse"};
+
     auto expression {m_editor.getExpression()};
 
-    // TODO split for two expression by operator lexem and remove while loop
-
-    std::string result {};
-
-    while (iter != expression.end())
+    for (const auto& delimeter : delimeters)
     {
-        while (std::isxdigit(*iter) || *iter == '.')
+        auto pos {expression.find(delimeter)};
+        if (pos == std::string::npos || pos == 0 && delimeter == "-")
         {
-            ++iter;
+            continue;
         }
 
-        RealNumber lhs {0., 0, 0};
         try
         {
-            lhs = RealNumber{expression.substr(0, std::distance(expression.begin(), iter)),
-                             m_editor.getBase(), 2};
+            auto lhs {expression.substr(0, pos)};
+
+            Processor::getInstance()->setLhs({lhs, m_editor.getBase(), m_editor.getAccuracy()});
+            Processor::getInstance()->setOperator(delimeter);
+
+            if (pos + delimeter.size() < expression.size())
+            {
+                auto rhs {expression.substr(pos + delimeter.size(), expression.size())};
+                Processor::getInstance()->setRhs({rhs, m_editor.getBase(), m_editor.getAccuracy()});
+            }
         }
-        catch (const ConversionException& ex)
+        catch (const std::exception& ex)
         {
             qWarning() << ex.what();
-            return "";
         }
-
-        switch (*iter++)
-        {
-            case '+':
-            {
-                Processor::getInstance()->setOperator(Processor::Operator::Plus);
-                break;
-            }
-            case '-':
-            {
-                Processor::getInstance()->setOperator(Processor::Operator::Minus);
-                break;
-            }
-            case '*':
-            {
-                Processor::getInstance()->setOperator(Processor::Operator::Multiply);
-                break;
-            }
-            case '/':
-            {
-                Processor::getInstance()->setOperator(Processor::Operator::Division);
-                break;
-            }
-            default:
-            {
-                break;
-            }
-        }
-
-        RealNumber rhs {expression.substr(std::distance(iter, expression.begin()),
-                                          expression.size()), m_editor.getBase(), 2};
-
-        Processor::getInstance()->setLhs(lhs);
-        Processor::getInstance()->setRhs(rhs);
-
-        result = Processor::getInstance()->execute().string();
-
-        m_editor.resetExpression(result);
+        break;
     }
+
+    auto result {Processor::getInstance()->execute().string()};
+    m_editor.resetExpression(result);
 
     return QString::fromStdString(result);
 }
@@ -93,7 +66,19 @@ void Controller::setBase(const int base)
     {
         m_editor.setBase(base);
     }
-    catch (const std::invalid_argument& ex)
+    catch (const std::exception& ex)
+    {
+        std::cerr << ex.what() << std::endl;
+    }
+}
+
+void Controller::setAccuracy(const int accuracy)
+{
+    try
+    {
+        m_editor.setAccuracy(accuracy);
+    }
+    catch(const std::exception& ex)
     {
         std::cerr << ex.what() << std::endl;
     }

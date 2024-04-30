@@ -148,12 +148,12 @@ Item {
 
         OperationButton {
             id: button_rev
-            text: "rev"
+            text: "reverse"
         }
 
         OperationButton {
             id: button_sqrt
-            text: "sqrt"
+            text: "square"
         }
 
         TextButton {

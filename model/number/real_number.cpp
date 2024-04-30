@@ -25,7 +25,9 @@ void checkZero(const RealNumber& lhs)
 }
 
 RealNumber::RealNumber(const std::string& value, int base, int accuracy):
-    m_value{ConverterP2Decimal::pToFloat(value, base)},
+    m_value{value.find(".") == std::string::npos ?
+              ConverterP2Decimal::pToInt(value, base) :
+              ConverterP2Decimal::pToFloat(value, base)},
     m_base{base},
     m_accuracy{accuracy}
 {}

@@ -1,6 +1,6 @@
 #include "processor.hpp"
 
-auto Processor::getInstance() noexcept -> Processor*
+Processor* Processor::getInstance()
 {
     static Processor instance {};
     return &instance;
@@ -9,6 +9,38 @@ auto Processor::getInstance() noexcept -> Processor*
 void Processor::setOperator(const Operator op)
 {
     m_operator = op;
+}
+
+void Processor::setOperator(const std::string& op)
+{
+    if (op == "+")
+    {
+        m_operator = Operator::Plus;
+    }
+    else if (op == "-")
+    {
+        m_operator = Operator::Minus;
+    }
+    else if (op == "*")
+    {
+        m_operator = Operator::Multiply;
+    }
+    else if (op == "/")
+    {
+        m_operator = Operator::Division;
+    }
+    else if (op == "square")
+    {
+        m_operator = Operator::Square;
+    }
+    else if (op == "reverse")
+    {
+        m_operator = Operator::Reverse;
+    }
+    else
+    {
+        m_operator = Operator::None;
+    }
 }
 
 void Processor::setLhs(const RealNumber& lhs)

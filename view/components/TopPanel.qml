@@ -2,88 +2,111 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-Item {
+Rectangle {
     property alias inputValue: number_line.text
-    property alias inputBase: spinbox.value
+    property alias inputBase: base_spinbox.value
 
     signal outputBaseValueChanged()
 
-    component BaseText : Text {
+    component CalculatorText : Text {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignHCenter
 
         Layout.fillHeight: true
         Layout.fillWidth: true
-        Layout.preferredWidth: parent.width / parent.columns
-        Layout.preferredHeight: parent.height / parent.rows
     }
 
-    Rectangle {
+    component CalculatorSpinBox : SpinBox {
+        Layout.fillWidth: true
+    }
+
+    component CalculatorSlider: Slider {
+        snapMode: Slider.SnapAlways
+        Layout.fillWidth: true
+    }
+
+    ColumnLayout {
         anchors.fill: parent
 
-        BaseText {
+        spacing: 100
+
+        CalculatorText {
             id: number_line
-            height: 50
 
-            anchors {
-                left: parent.left
-                right: parent.right
-                top: parent.top
-                margins: 30
-            }
+            Layout.fillWidth: true
+            Layout.fillHeight: true
         }
 
-        BaseText {
-            id: base_label
-            text: qsTr("Основание")
-            height: 30
+        GridLayout {
+            rows: 2
+            columns: 3
 
-            anchors {
-                left: parent.left
-                top: number_line.bottom
-                margins: 30
-            }
-        }
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-        SpinBox {
-            id: spinbox
-            from: 2
-            to: 16
-            value: 2
-            height: 30
-
-            anchors {
-                left: parent.left
-                top: base_label.bottom
-                margins: 30
+            CalculatorText {
+                id: base_label
+                text: qsTr("Основание")
             }
 
-            onValueChanged: {
-                slider.value = value
-                Controller.setBase(spinbox.value)
+            CalculatorSpinBox {
+                id: base_spinbox
+                from: 2
+                to: 16
+                value: 2
+
+                onValueChanged: {
+                    base_slider.value = value
+                    Controller.setBase(value)
+                }
+
+                Component.onCompleted: {
+                    Controller.setBase(value)
+                }
             }
 
-            Component.onCompleted: {
-                Controller.setBase(spinbox.value)
-            }
-        }
+            CalculatorSlider {
+                id: base_slider
+                from: 2
+                to: 16
+                stepSize: 1
+                snapMode: Slider.SnapAlways
 
-        Slider {
-            id: slider
-            from: 2
-            to: 16
-            stepSize: 1
-            snapMode: Slider.SnapAlways
-            width: 200
-
-            anchors {
-                top: base_label.bottom
-                right: parent.right
-                margins: 30
+                onValueChanged: {
+                    base_spinbox.value = value
+                }
             }
 
-            onValueChanged: {
-                spinbox.value = value
+            CalculatorText {
+                id: accuracy_label
+                text: qsTr("Точность")
+            }
+
+            CalculatorSpinBox {
+                id: accuracy_spinbox
+                from: 0
+                to: 8
+                value: 0
+
+                onValueChanged: {
+                    accuracy_slider.value = value
+                    Controller.setAccuracy(value)
+                }
+
+                Component.onCompleted: {
+                    Controller.setAccuracy(value)
+                }
+            }
+
+            CalculatorSlider {
+                id: accuracy_slider
+                from: 0
+                to: 8
+                stepSize: 1
+
+                onValueChanged: {
+                    accuracy_spinbox.value = value
+                }
             }
         }
     }

@@ -11,6 +11,7 @@ class Controller : public QObject
 
 public:
     Q_INVOKABLE void setBase(int base);
+    Q_INVOKABLE void setAccuracy(int accuracy);
     Q_INVOKABLE void addExpression(const QString& text);
     Q_INVOKABLE void clearEntry();
     Q_INVOKABLE void clearAll();
