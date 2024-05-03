@@ -148,18 +148,18 @@ Item {
 
         OperationButton {
             id: button_rev
-            text: "reverse"
+            text: "~"
         }
 
         OperationButton {
             id: button_sqrt
-            text: "square"
+            text: "^"
         }
 
         TextButton {
             id: button_dot
             text: "."
-            enabled: inputValue !== "" && inputValue.indexOf(".") === -1
+            enabled: true
         }
 
         ActionButton {

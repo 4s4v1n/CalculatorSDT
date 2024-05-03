@@ -1,8 +1,8 @@
 #include "controller.hpp"
 
-#include <algorithm>
 #include <array>
 #include <iostream>
+#include <regex>
 
 #include "model/converter/converter_p_to_decimal.hpp"
 #include "model/converter/converter_decimal_to_p.hpp"
@@ -11,24 +11,28 @@
 
 #include "model/number/real_number.hpp"
 
-// #include "model/exception/conversion_exception.hpp"
-
 Controller* Controller::getInstance()
 {
     static Controller instance {};
     return &instance;
 }
 
+// ~ is reverse
+// ^ is square
+
 QString Controller::calculate()
 {
-    static std::array<std::string, 6> delimeters {"+", "-", "*", "/",
-                                                  "square", "reverse"};
-
+    static const std::array<std::string, 6> delimeters {"+", "-", "*", "/",
+                                                        "^", "~"};
     auto expression {m_editor.getExpression()};
-
     for (const auto& delimeter : delimeters)
-    {
+    {   
         auto pos {expression.find(delimeter)};
+        if (pos == std::string::npos)
+        {
+
+        }
+
         if (pos == std::string::npos || pos == 0 && delimeter == "-")
         {
             continue;
@@ -54,10 +58,10 @@ QString Controller::calculate()
         break;
     }
 
-    auto result {Processor::getInstance()->execute().string()};
-    m_editor.resetExpression(result);
+    auto result {Processor::getInstance()->execute()};
+    m_editor.resetExpression(result.string());
 
-    return QString::fromStdString(result);
+    return QString::fromStdString(result.string());
 }
 
 void Controller::setBase(const int base)
@@ -95,6 +99,11 @@ void Controller::addExpression(const QString& text)
     {
         std::cerr << ex.what() << std::endl;
     }
+}
+
+void Controller::setExpression(const QString& text)
+{
+    m_editor.resetExpression(text.toStdString());
 }
 
 void Controller::clearEntry()

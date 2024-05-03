@@ -43,7 +43,6 @@ ApplicationWindow {
         }
 
         currentIndex: bar.currentIndex
-        focus: true
 
         MainPage {}
         HistoryPage {}

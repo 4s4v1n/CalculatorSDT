@@ -5,7 +5,6 @@ import "../conversion.js" as Conversion
 
 Item {
     id: root
-    focus: true
 
     TopPanel {
         id: top_panel
@@ -31,9 +30,7 @@ Item {
         }
 
         onTextButtonClicked: (text) => {
-            top_panel.inputValue += text
-
-            Controller.addExpression(text)
+            top_panel.numberLine.insert(inputValue.length, text)
         }
 
         onClearAllButtonClicked: () => {
@@ -49,33 +46,6 @@ Item {
 
         onCalculateButtonClicked: () => {
             top_panel.inputValue = Controller.calculate()
-        }
-    }
-
-    Keys.onPressed: (event) => {
-        var key   = event.key
-        var text  = event.text
-        var base  = top_panel.inputBase
-        var value = top_panel.inputValue
-
-        if ((key >= Qt.Key_0 && key <= Qt.Key_9 || key >= Qt.Key_A && key <= Qt.Key_F)) {
-            if (value === "0") {
-                return
-            }
-            if (Conversion.hexCharacterToDecimal(text) >= base) {
-                return
-            }
-            top_panel.inputValue += text
-
-            Controller.addSymbol(text)
-        } else if (key === Qt.Key_Period && value !== "" && value.indexOf(".") === -1) {
-            top_panel.inputValue += text
-
-            Controller.addSymbol(text)
-        } else if (key === Qt.Key_Minus && value === "") {
-            top_panel.inputValue += text
-
-            Controller.addSymbol(text)
         }
     }
 
@@ -97,9 +67,5 @@ Item {
         // top_panel.outputValue = ""
 
         Controller.clearAll()
-    }
-
-    Keys.onReleased: (event) => {
-        root.focus = true
     }
 }

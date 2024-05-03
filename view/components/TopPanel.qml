@@ -2,9 +2,12 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import '../conversion.js' as Conversion
+
 Rectangle {
     property alias inputValue: number_line.text
     property alias inputBase: base_spinbox.value
+    property alias numberLine: number_line
 
     signal outputBaseValueChanged()
 
@@ -30,11 +33,21 @@ Rectangle {
 
         spacing: 100
 
-        CalculatorText {
+        TextInput {
             id: number_line
+
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignHCenter
+            validator: RegularExpressionValidator {
+                regularExpression: Conversion.regexFromBase(base_slider.value)
+            }
 
             Layout.fillWidth: true
             Layout.fillHeight: true
+
+            onTextChanged: {
+                Controller.setExpression(text);
+            }
         }
 
         GridLayout {

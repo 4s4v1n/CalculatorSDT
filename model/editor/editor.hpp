@@ -24,8 +24,8 @@ private:
                                                      "C", "D", "E", "F",
                                                      "a", "b", "c", "d",
                                                      "e", "f", ".", "-",
-                                                     "+", "*", "/", "square",
-                                                     "reverse"};
+                                                     "+", "*", "/", "^",
+                                                     "~"};
 private:
     std::string m_expression {};
     int         m_base       {2};

@@ -23,6 +23,7 @@ set(HDR_FILES
         model/exception/number_exception.hpp
         model/exception/calculation_exception.hpp
         model/exception/conversion_exception.hpp
+        model/memory/memory.hpp
         controller/controller.hpp
 )
 set(SRC_FILES
@@ -36,6 +37,7 @@ set(SRC_FILES
         model/exception/number_exception.cpp
         model/exception/calculation_exception.cpp
         model/exception/conversion_exception.cpp
+        model/memory/memory.cpp
         controller/controller.cpp
 )
 
