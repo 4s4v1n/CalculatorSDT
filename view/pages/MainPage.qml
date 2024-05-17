@@ -6,6 +6,8 @@ import "../conversion.js" as Conversion
 Item {
     id: root
 
+    readonly property regexp memoryRegex: /^-?[0-9a-fA-F]+(\\.[0-9a-fA-F]+)?$/
+
     TopPanel {
         id: top_panel
         height: parent.height / 4
@@ -44,28 +46,28 @@ Item {
             Controller.clearEntry()
         }
 
-        onCalculateButtonClicked: () => {
+        onCalculateButtonClicked: () => {                          
             top_panel.inputValue = Controller.calculate()
         }
-    }
 
-    Keys.onEnterPressed: (event) => {
-        if (top_panel.inputValue !== "") {
-            // top_panel.outputValue = Controller.convert()
+        onMemoryClearClicked: {
+            Controller.memoryClear()
         }
-    }
 
-    Keys.onBackPressed: (event) => {
-        if (top_panel.inputValue !== "") {
-            top_panel.inputValue = top_panel.inputValue.slice(0, -1)
-            Controller.clearEntry()
+        onMemorySaveClicked: {
+            if (top_panel.inputValue.match(memoryRegex)) {
+                Controller.memorySave(top_panel.inputValue)
+            }
         }
-    }
 
-    Keys.onEscapePressed: (event) => {
-        top_panel.inputValue  = ""
-        // top_panel.outputValue = ""
+        onMemoryReadClicked: {
+            top_panel.inputValue = Controller.memoryRead()
+        }
 
-        Controller.clearAll()
+        onMemoryAddClicked: {
+            if (top_panel.inputValue.match(memoryRegex)) {
+                Controller.memoryAdd(top_panel.inputValue)
+            }
+        }
     }
 }

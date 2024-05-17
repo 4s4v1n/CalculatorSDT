@@ -6,18 +6,18 @@
 
 #include "../exception/conversion_exception.hpp"
 
-std::string ConverterDecimal2P::floatToP(double value, int notation, int accuracy)
+std::string ConverterDecimal2P::floatToP(double value, int base, int accuracy)
 {
-    if (notation < 2 || notation > 16)
+    if (base < 2 || base > 16)
     {
-        std::string exception_message {"got invalid number notation " + std::to_string(notation)};
+        std::string exception_message {"got invalid number base " + std::to_string(base)};
         throw ConversionException{exception_message.c_str()};
     }
 
     auto integer_part{0.};
     auto fractional_part    {std::modf(value, &integer_part)};
 
-    std::string integer_str    {intToP(static_cast<int>(integer_part), notation)};
+    std::string integer_str    {intToP(static_cast<int>(integer_part), base)};
     std::string fractional_str {};
 
     if (fractional_part < 0)
@@ -32,7 +32,7 @@ std::string ConverterDecimal2P::floatToP(double value, int notation, int accurac
     auto current_accuracy {0};
     while (fractional_part > std::numeric_limits<double>::epsilon() && current_accuracy < accuracy)
     {
-        fractional_part *= notation;
+        fractional_part *= base;
         fractional_part = std::modf(fractional_part, &integer_part);
 
         fractional_str.push_back(intToChar(static_cast<int>(integer_part)));
@@ -52,11 +52,11 @@ std::string ConverterDecimal2P::floatToP(double value, int notation, int accurac
     return (integer_str + "." + fractional_str);
 }
 
-std::string ConverterDecimal2P::intToP(int value, const int notation)
+std::string ConverterDecimal2P::intToP(int value, const int base)
 {
-    if (notation < 2 || notation > 16)
+    if (base < 2 || base > 16)
     {
-        std::string exception_message {"got invalid number notation " + std::to_string(notation)};
+        std::string exception_message {"got invalid number base " + std::to_string(base)};
         throw ConversionException{exception_message.c_str()};
     }
 
@@ -70,8 +70,8 @@ std::string ConverterDecimal2P::intToP(int value, const int notation)
     std::list<int> remainder_list {};
     do
     {
-        remainder_list.push_front(value % notation);
-        value /= notation;
+        remainder_list.push_front(value % base);
+        value /= base;
     }
     while (value != 0);
 

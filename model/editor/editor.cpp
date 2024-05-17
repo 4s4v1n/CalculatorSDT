@@ -52,6 +52,10 @@ void Editor::addExpression(const std::string &expression)
 
 void Editor::clearEntry()
 {
+    if (m_expression.empty())
+    {
+        return;
+    }
     m_expression.pop_back();
 }
 

@@ -15,8 +15,7 @@ public:
     RealNumber operator*(const RealNumber& rhs) const;
     RealNumber operator/(const RealNumber& rhs) const;
 
-    RealNumber square() const;
-    RealNumber reverse() const;
+    friend RealNumber operator/(double lhs, const RealNumber& rhs);
 
     int accuracy() const;
     int base() const ;

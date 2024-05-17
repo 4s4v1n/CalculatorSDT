@@ -7,12 +7,16 @@ import "../conversion.js" as Conversion
 
 Item {
     property string inputValue
-    property int    inputBase
+    property int inputBase
 
     signal textButtonClicked(string text)
-    signal clearEntryButtonClicked()
-    signal clearAllButtonClicked()
-    signal calculateButtonClicked()
+    signal clearEntryButtonClicked
+    signal clearAllButtonClicked
+    signal calculateButtonClicked
+    signal memoryReadClicked
+    signal memorySaveClicked
+    signal memoryAddClicked
+    signal memoryClearClicked
 
     GridLayout {
         id: grid_layout
@@ -22,28 +26,60 @@ Item {
         columnSpacing: 10
         anchors.fill: parent
 
-        component BaseButton : Button {
+        component BaseButton: Button {
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.preferredWidth: parent.width / parent.columns
             Layout.preferredHeight: parent.height / parent.rows
         }
 
-        component TextButton : BaseButton {
-            enabled: Conversion.hexCharacterToDecimal(this.text) < inputBase &&
-                     inputValue !== "0"
+        component TextButton: BaseButton {
+            enabled: Conversion.hexCharacterToDecimal(this.text) < inputBase
+                     && inputValue !== "0"
 
-            onClicked: () => {
-                textButtonClicked(this.text)
+            onClicked: textButtonClicked(this.text)
+        }
+
+        component ActionButton: BaseButton {
+            enabled: true
+            palette.buttonText: "red"
+        }
+
+        component OperationButton: TextButton {
+            enabled: true
+            palette.buttonText: "blue"
+        }
+
+        ActionButton {
+            id: memory_clear
+            text: "MC"
+            onClicked: {
+                memoryClearClicked()
             }
         }
 
-        component ActionButton : BaseButton {
-            enabled: inputValue !== ""
+        ActionButton {
+            id: memory_save
+            text: "MS"
+            onClicked: {
+                memorySaveClicked()
+            }
         }
 
-        component OperationButton : TextButton {
-            enabled: true
+        ActionButton {
+            id: memory_read
+            text: "MR"
+            onClicked: {
+                memoryReadClicked()
+            }
+        }
+
+        ActionButton {
+            id: memory_add
+            text: "M+"
+            onClicked: {
+                memoryAddClicked()
+            }
         }
 
         TextButton {
@@ -166,27 +202,21 @@ Item {
             id: button_ac
             text: "AC"
 
-            onClicked: () => {
-                clearAllButtonClicked()
-            }
+            onClicked: clearAllButtonClicked()
         }
 
         ActionButton {
             id: button_ce
             text: "CE"
 
-            onClicked: () => {
-                clearEntryButtonClicked()
-            }
+            onClicked: clearEntryButtonClicked()
         }
 
         ActionButton {
             id: button_calculate
             text: "="
 
-            onClicked: () => {
-                calculateButtonClicked()
-            }
+            onClicked: calculateButtonClicked()
         }
     }
 }

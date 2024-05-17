@@ -9,6 +9,8 @@
 
 #include "model/processor/processor.hpp"
 
+#include "model/memory/memory.hpp"
+
 #include "model/number/real_number.hpp"
 
 Controller* Controller::getInstance()
@@ -25,12 +27,17 @@ QString Controller::calculate()
     static const std::array<std::string, 6> delimeters {"+", "-", "*", "/",
                                                         "^", "~"};
     auto expression {m_editor.getExpression()};
+    if (expression.empty())
+    {
+        return "";
+    }
+
     for (const auto& delimeter : delimeters)
     {   
         auto pos {expression.find(delimeter)};
         if (pos == std::string::npos)
         {
-
+            // TODO make something
         }
 
         if (pos == std::string::npos || pos == 0 && delimeter == "-")
@@ -59,7 +66,9 @@ QString Controller::calculate()
     }
 
     auto result {Processor::getInstance()->execute()};
+
     m_editor.resetExpression(result.string());
+    Processor::getInstance()->setLhs(result);
 
     return QString::fromStdString(result.string());
 }
@@ -114,4 +123,65 @@ void Controller::clearEntry()
 void Controller::clearAll()
 {
     m_editor.clearAll();
+}
+
+
+void Controller::memoryAdd(const QString& value)
+{
+    if (!Memory::getInstance()->isActive())
+    {
+        return;
+    }
+
+    try
+    {
+        auto currentValue {Memory::getInstance()->getValue()};
+        auto newValue     {RealNumber{value.toStdString(), m_editor.getBase(),
+                                 m_editor.getAccuracy()}};
+        Memory::getInstance()->setValue(currentValue + newValue);
+    }
+    catch(const std::exception& ex)
+    {
+        std::cerr << ex.what() << std::endl;
+    }
+}
+
+void Controller::memorySave(const QString& value)
+{
+    Memory::getInstance()->on();
+
+    try
+    {
+        Memory::getInstance()->setValue(RealNumber{value.toStdString(),
+                                                   m_editor.getBase(), m_editor.getAccuracy()});
+    }
+    catch(const std::exception& ex)
+    {
+        std::cerr << ex.what() << std::endl;
+    }
+
+}
+
+void Controller::memoryClear()
+{
+    Memory::getInstance()->clear();
+    Memory::getInstance()->off();
+}
+
+QString Controller::memoryRead()
+{
+    if (!Memory::getInstance()->isActive())
+    {
+        return "";
+    }
+
+    try
+    {
+        return QString::fromStdString(Memory::getInstance()->getValue().string());
+    }
+    catch(const std::exception& ex)
+    {
+        std::cerr << ex.what() << std::endl;
+        return "";
+    }
 }

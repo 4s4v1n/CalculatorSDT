@@ -29,11 +29,11 @@ void Processor::setOperator(const std::string& op)
     {
         m_operator = Operator::Division;
     }
-    else if (op == "square")
+    else if (op == "^")
     {
         m_operator = Operator::Square;
     }
-    else if (op == "reverse")
+    else if (op == "~")
     {
         m_operator = Operator::Reverse;
     }
@@ -62,7 +62,7 @@ RealNumber Processor::execute()
         case Operator::Minus:    return m_lhs - m_rhs;
         case Operator::Multiply: return m_lhs * m_rhs;
         case Operator::Division: return m_lhs / m_rhs;
-        case Operator::Square:   return m_lhs.square();
-        case Operator::Reverse:  return m_lhs.reverse();
+        case Operator::Square:   return m_lhs * m_lhs;
+        case Operator::Reverse:  return 1. / m_lhs;
     }
 }

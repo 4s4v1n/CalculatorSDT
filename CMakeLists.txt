@@ -16,7 +16,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(HDR_FILES
         model/converter/converter_decimal_to_p.hpp
         model/converter/converter_p_to_decimal.hpp
-        model/history/history.hpp
         model/editor/editor.hpp
         model/number/real_number.hpp
         model/processor/processor.hpp
@@ -30,7 +29,6 @@ set(SRC_FILES
         main.cpp
         model/converter/converter_decimal_to_p.cpp
         model/converter/converter_p_to_decimal.cpp
-        model/history/history.cpp
         model/editor/editor.cpp
         model/number/real_number.cpp
         model/processor/processor.cpp
@@ -57,7 +55,6 @@ qt_add_qml_module(${PROJECT_NAME}
         view/conversion.js
         view/pages/MainPage.qml
         view/pages/ReferencePage.qml
-        view/pages/HistoryPage.qml
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

@@ -58,17 +58,6 @@ std::string RealNumber::string() const
     return ConverterDecimal2P::floatToP(m_value, m_base, m_accuracy);
 }
 
-RealNumber RealNumber::square() const
-{
-    return RealNumber{m_value * m_value, m_base, m_accuracy};
-}
-
-RealNumber RealNumber::reverse() const
-{
-    checkZero(*this);
-    return RealNumber{1. / m_value, m_base, m_accuracy};
-}
-
 RealNumber RealNumber::operator+(const RealNumber& rhs) const
 {
     checkBase(*this, rhs);
@@ -92,4 +81,10 @@ RealNumber RealNumber::operator/(const RealNumber& rhs) const
     checkBase(*this, rhs);
     checkZero(rhs);
     return RealNumber{m_value / rhs.m_value, m_base, m_accuracy};
+}
+
+RealNumber operator/(double lhs, const RealNumber& rhs)
+{
+    checkZero(rhs);
+    return RealNumber{lhs / rhs.m_value, rhs.m_base, rhs.m_accuracy};
 }

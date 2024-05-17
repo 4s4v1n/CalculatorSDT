@@ -1,12 +1,16 @@
 #ifndef MEMORY_HPP
 #define MEMORY_HPP
 
-template <typename T>
+#include "../number/real_number.hpp"
+
 class Memory
 {
 public:
-    void setValue(const T& value);
-    T getValue() const;
+    static Memory* getInstance();
+
+public:
+    void setValue(const RealNumber& value);
+    RealNumber getValue() const;
     void on();
     void off();
     void clear();
@@ -20,8 +24,12 @@ private:
     };
 
 private:
-    T     m_value {};
-    State m_state {State::Off};
+    Memory() = default;
+    ~Memory() = default;
+
+private:
+    RealNumber m_value {0., 0, 0};
+    State      m_state {State::Off};
 };
 
 #endif // MEMORY_HPP

@@ -8,25 +8,21 @@ import "pages"
 ApplicationWindow {
     id: window
     width: 600
-    height: 800
+    height: 700
     flags: Qt.Window
     visible: true
 
-    minimumWidth: 600
-    maximumWidth: 600
-    minimumHeight: 800
-    maximumHeight: 800
+    minimumWidth: 700
+    maximumWidth: 700
+    minimumHeight: 700
+    maximumHeight: 700
 
     TabBar {
         id: bar
         width: parent.width
 
         TabButton {
-            text: qsTr("Конвертер")
-        }
-
-        TabButton {
-            text: qsTr("История")
+            text: qsTr("Калькулятор")
         }
 
         TabButton {
@@ -45,7 +41,6 @@ ApplicationWindow {
         currentIndex: bar.currentIndex
 
         MainPage {}
-        HistoryPage {}
         ReferencePage {}
     }
 }

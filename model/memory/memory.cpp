@@ -1,39 +1,38 @@
 #include "memory.hpp"
 
-template <typename T>
-void Memory<T>::setValue(const T& value)
+Memory* Memory::getInstance()
+{
+    static Memory instance {};
+    return &instance;
+}
+
+void Memory::setValue(const RealNumber& value)
 {
     m_value = value;
 }
 
-template <typename T>
-T Memory<T>::getValue() const
+RealNumber Memory::getValue() const
 {
     return m_value;
 }
 
-template <typename T>
-void Memory<T>::on()
+void Memory::on()
 {
     m_state = State::On;
 }
 
-template <typename T>
-void Memory<T>::off()
+void Memory::off()
 {
     m_state = State::Off;
 }
 
-template <typename T>
-void Memory<T>::clear()
+void Memory::clear()
 {
     m_state = State::Off;
-    m_value = {};
+    m_value = RealNumber{0., 0, 0};
 }
 
-
-template <typename T>
-bool Memory<T>::isActive() const
+bool Memory::isActive() const
 {
     return m_state == State::On;
 }
